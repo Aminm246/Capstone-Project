@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Subscriptions:</h1>
+<table>
+    <tr><th>ID</th><th>NAME</th><th>PRICE</th><th>DURATION</th><th>FREQUENCY</th></tr>
+    <tr th:each="todo: ${subscriptions}">
+        <td th:text="${subscription.id}"></td>
+        <td th:text="${subscription.name}"></td>
+        <td th:text="${subscription.price}"></td>
+        <td th:text="${subscription.duration}"></td>
+        <td th:text="${subscription.paymentFrequency}"></td>
+        <td>
+            <a th:href="@{/retrieve/{id}(id=${subscription.id})}">View</a>
+            <a th:href="@{/retrieve/{id}(id=${subscription.id})}">Update</a>
+            <a th:href="@{/delete/{id}(id=${subscription.id})}">Delete</a>
+        </td>
+    </tr>
+</table>
+<br>
+<button type="button"><a href="/createSubscription">Add Subscription</a></button>
+</br>
+</body>
+</html>
