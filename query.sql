@@ -13,6 +13,6 @@ primary key(id)
 create table users (
 firstName	varchar(30),
 lastName	varchar(30),
-email	varchar(50),userssubscriptions
+email	varchar(50),
 primary key(email)
 );
