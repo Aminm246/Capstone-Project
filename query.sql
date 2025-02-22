@@ -9,3 +9,10 @@ duration	varchar(90),
 paymentFreq	varchar(90),
 primary key(id)
 );
+
+create table users (
+firstName	varchar(30),
+lastName	varchar(30),
+email	varchar(50),userssubscriptions
+primary key(email)
+);
