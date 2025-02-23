@@ -1,16 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create New Subscription</title>
+    <title>Add New Subscription</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<form action="/addSpending" th:object="${subscription}" method="post">
-    <input th:field="*{name}" type="text" placeholder="name">
-    <input th:field="*{price}" type="number" placeholder="price">
-    <input th:field="*{duration}" type="text" placeholder="duration">
-    <input th:field="*{paymentFrequency}" type="text" placeholder="frequency">
-    <input type="submit" name="submit" value="create">
+<body class="container mt-4">
+<h1>Add New Subscription</h1>
+
+<form th:action="@{/addSpending}" method="post" class="mt-4">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name"
+               placeholder="Enter subscription name" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="number" step="0.01" class="form-control" id="price" name="price"
+               placeholder="Enter price" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="duration" class="form-label">Duration</label>
+        <input type="text" class="form-control" id="duration" name="duration"
+               placeholder="Enter duration">
+    </div>
+
+    <div class="mb-3">
+        <label for="paymentFrequency" class="form-label">Payment Frequency</label>
+        <select class="form-select" id="paymentFrequency" name="paymentFrequency">
+            <option value="">Select frequency</option>
+            <option value="Monthly">Monthly</option>
+            <option value="Yearly">Yearly</option>
+            <option value="Quarterly">Quarterly</option>
+            <option value="Weekly">Weekly</option>
+        </select>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success">Add Subscription</button>
+        <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+    </div>
 </form>
 </body>
 </html>
