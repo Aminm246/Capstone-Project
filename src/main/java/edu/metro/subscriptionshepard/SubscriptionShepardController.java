@@ -19,21 +19,27 @@ public class SubscriptionShepardController {
         return "dashboard";
     }
 
+    @GetMapping("/addSpending")
+    public String showAddForm(Model model) {
+        model.addAttribute("subscription", new Subscription());
+        return "addSpending";
+    }
+
     @PostMapping("/addSpending")
     public String addSpending(@ModelAttribute Subscription sub, Model model){
         subService.create(sub);
-        model.addAttribute("dashboard", subService.retrieveAll());
-        return "/dashboard";
+        model.addAttribute("subscriptions", subService.retrieveAll());
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/retrieve/{id}")
-    public String retrieveAll(@PathVariable int id, Model model){
-        model.addAttribute("subscription", subService.retrieve(id));
+    public String retrieveAll(@PathVariable Long id, Model model){
+        model.addAttribute("subscription", subService.retrieve(id).orElse(new Subscription()));
         return "/subscription";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable int id, Model model){
+    public String delete(@PathVariable Long id, Model model){
         subService.delete(id);
         return "redirect:/dashboard";
     }
@@ -43,6 +49,4 @@ public class SubscriptionShepardController {
         subService.update(sub);
         return "redirect:/dashboard";
     }
-
 }
-
