@@ -7,23 +7,48 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            background-color: #121212;
+            background-color: skyblue;
             color: white;
+        }
+        h1 {
+            text-align: center;
         }
         .table {
             color: white;
+            width: 94%;
+            margin-left: 3%;
+            margin-right: 3%;
+            border-collapse: collapse;
+            text-align: center;
+            align-content: center;
+        }
+        thead>tr {
+            background-color: #229954;
+            font-size: 20px;
+        }
+        tr, thead {
+            height: 50px;
         }
         .table-striped>tbody>tr:nth-of-type(odd) {
-            background-color: rgba(255,255,255,0.05);
+            background-color: #52be80;
+        }
+        .table-striped>tbody>tr:nth-of-type(even) {
+            background-color: #7dcea0;
+        }
+        .table-striped>tbody>tr:nth-of-type(odd)>td {
+            color: white;
         }
         .chart-section {
             display: flex;
+            margin-top: 2rem;
             margin-bottom: 1.5rem;
-            background-color: #121212;
+            background-color: skyblue;
         }
         .chart-container {
             width: 65%;
-            padding: 1rem;
+            padding-left: 150px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
         .summary-container {
             width: 35%;
@@ -33,10 +58,28 @@
             align-items: center;
             padding: 1rem;
         }
+        #addNew {
+            float: right;
+            margin-right: 3%;
+            margin-bottom: 3%;
+        }
+        #btnAdd {
+            background-color: #377af0;
+            border: none;
+            border-radius: 20px;
+        }
+        #btnDelete {
+            background-color: #ec7063;
+            border-radius: 20px;
+        }
+        #btnEdit {
+            background-color: #377af0;
+            border-radius: 20px;
+        }
     </style>
 </head>
 <body class="container mt-4">
-<h1>Subscriptions Dashboard</h1>
+<h1>Subscription Shepherd Dashboard</h1>
 
 <div class="chart-section">
     <div class="chart-container">
@@ -70,16 +113,17 @@
             <td th:text="${subscription.duration}"></td>
             <td th:text="${subscription.paymentFrequency}"></td>
             <td>
-                <a th:href="@{/retrieve/{id}(id=${subscription.id})}" class="btn btn-sm btn-primary">Edit</a>
-                <a th:href="@{/delete/{id}(id=${subscription.id})}" class="btn btn-sm btn-danger"
+                <a th:href="@{/retrieve/{id}(id=${subscription.id})}" id="btnEdit" class="btn btn-sm btn-primary">Edit</a>
+                <a th:href="@{/delete/{id}(id=${subscription.id})}" id="btnDelete" class="btn btn-sm btn-danger"
                    onclick="return confirm('Are you sure you want to delete this subscription?')">Delete</a>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-
-<a href="/addSpending" class="btn btn-success">Add New Subscription</a>
+<div id="addNew">
+    <a href="/addSpending" id="btnAdd" class="btn btn-success">Add New Subscription</a>
+</div>
 
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
