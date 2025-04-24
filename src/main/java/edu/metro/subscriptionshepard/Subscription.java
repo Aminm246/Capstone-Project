@@ -1,39 +1,49 @@
 package edu.metro.subscriptionshepard;
 
+// Import JPA annotations for database mapping
 import jakarta.persistence.*;
+// Import JsonIgnore to prevent circular references during JSON serialization
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-// This class represents a subscription that a user might have
+// Mark this class as a JPA entity so it maps to a database table
 @Entity
+// Specify the table name in the database as subscriptions
 @Table(name = "subscriptions")
 public class Subscription {
 
-    // Unique ID for each subscription (auto-generated)
+    // This is the primary key for the subscription table and is auto-generated
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Name of the subscription (e.g., Netflix)
+    // The name of the subscription cannot be null in the database
     @Column(nullable = false)
     private String name;
 
-    // Cost of the subscription
+    // The price of the subscription cannot be null in the database
     @Column(nullable = false)
     private double price;
 
-    // Duration of the subscription (e.g., "1 Year")
+    // The duration of the subscription can be null
     @Column
     private String duration;
 
-    // How often the payment occurs (Monthly, Yearly, etc.)
+    // The payment frequency column in the database is named payment_frequency
     @Column(name = "payment_frequency")
     private String paymentFrequency;
 
-    // This links the subscription to a specific user
+    // Many subscriptions can belong to one user
+    // This sets up a foreign key called user_id in the subscriptions table
+    // JsonIgnore prevents infinite loops when converting to JSON
     @ManyToOne
-    @JoinColumn(name = "user_id") // Foreign key column in the database
+    @JoinColumn(name = "user_id")
+    @JsonIgnore // Breaks circular reference
     private User user;
 
-    // Constructor without ID (used when creating new subscriptions)
+    // Default constructor required by JPA
+    public Subscription() {}
+
+    // Constructor to create a subscription with all main fields except id and user
     public Subscription(String name, double price, String duration, String paymentFrequency) {
         this.name = name;
         this.price = price;
@@ -41,44 +51,37 @@ public class Subscription {
         this.paymentFrequency = paymentFrequency;
     }
 
-    // Constructor with ID (used when loading existing data)
-    public Subscription(Long id, String name, double price, String duration, String paymentFrequency) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.duration = duration;
+    // Getters and setters allow other parts of the program to access and change the fields
+
+    // Get the id of the subscription
+    public Long getId() { return id; }
+    // Set the id of the subscription
+    public void setId(Long id) { this.id = id; }
+
+    // Get the name of the subscription
+    public String getName() { return name; }
+    // Set the name of the subscription
+    public void setName(String name) { this.name = name; }
+
+    // Get the price of the subscription
+    public double getPrice() { return price; }
+    // Set the price of the subscription
+    public void setPrice(double price) { this.price = price; }
+
+    // Get the duration of the subscription
+    public String getDuration() { return duration; }
+    // Set the duration of the subscription
+    public void setDuration(String duration) { this.duration = duration; }
+
+    // Get the payment frequency of the subscription
+    public String getPaymentFrequency() { return paymentFrequency; }
+    // Set the payment frequency of the subscription
+    public void setPaymentFrequency(String paymentFrequency) {
         this.paymentFrequency = paymentFrequency;
     }
 
-    // Default constructor (required by JPA)
-    public Subscription() {}
-
-    // Getters and setters for all fields
-
-    public Long getId() { return id; }
-
-    public String getName() { return name; }
-
-    public double getPrice() { return price; }
-
-    public String getDuration() { return duration; }
-
-    public String getPaymentFrequency() { return paymentFrequency; }
-
-    // Getter for the linked User
+    // Get the user who owns this subscription
     public User getUser() { return user; }
-
-    // Setter for the linked User
+    // Set the user who owns this subscription
     public void setUser(User user) { this.user = user; }
-
-    // Setters for other fields (if needed)
-    public void setId(Long id) { this.id = id; }
-
-    public void setName(String name) { this.name = name; }
-
-    public void setPrice(double price) { this.price = price; }
-
-    public void setDuration(String duration) { this.duration = duration; }
-
-    public void setPaymentFrequency(String paymentFrequency) { this.paymentFrequency = paymentFrequency; }
 }

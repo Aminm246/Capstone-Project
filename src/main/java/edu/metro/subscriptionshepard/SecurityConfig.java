@@ -1,5 +1,6 @@
 package edu.metro.subscriptionshepard;
 
+// Import necessary Spring Security and configuration classes
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,58 +10,72 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+// Mark this class as a configuration for Spring
 @Configuration
+// Enable Spring Security for the application
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // This creates a password encoder to securely store user passwords
+    // Define a bean that provides a password encoder using BCrypt for hashing passwords
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // BCrypt is a strong hashing algorithm for storing passwords securely
         return new BCryptPasswordEncoder();
     }
 
+    // Define the main security filter chain bean
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF protection for H2 console only
+                // Disable CSRF protection only for the H2 database console so it works in the browser
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers(
-                                AntPathRequestMatcher.antMatcher("/h2-console/**"))
+                        .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
                 )
 
-                // Configure which URLs are accessible without login
-                .authorizeHttpRequests(auth -> {
-                    // Allow access to H2 console and public pages
-                    auth.requestMatchers(
-                            AntPathRequestMatcher.antMatcher("/h2-console/**"),
-                            AntPathRequestMatcher.antMatcher("/login"),
-                            AntPathRequestMatcher.antMatcher("/register"),
-                            AntPathRequestMatcher.antMatcher("/css/**"),
-                            AntPathRequestMatcher.antMatcher("/js/**")
-                    ).permitAll();
+                // Set up which URLs are allowed without logging in and which require authentication
+                .authorizeHttpRequests(auth -> auth
+                        // Allow anyone to access the H2 console, login page, registration page and static CSS or JS files
+                        .requestMatchers(
+                                AntPathRequestMatcher.antMatcher("/h2-console/**"),
+                                AntPathRequestMatcher.antMatcher("/login"),
+                                AntPathRequestMatcher.antMatcher("/register"),
+                                AntPathRequestMatcher.antMatcher("/css/**"),
+                                AntPathRequestMatcher.antMatcher("/js/**")
+                        ).permitAll()
+                        // Any other request requires the user to be logged in
+                        .anyRequest().authenticated()
+                )
 
-                    // Require login for all other pages
-                    auth.anyRequest().authenticated();
-                })
-
-                // Set up the login page and redirect after successful login
+                // Configure the login form
                 .formLogin(form -> form
-                        .loginPage("/login")          // Custom login page URL
-                        .defaultSuccessUrl("/dashboard") // Where users go after login
-                        .permitAll()                  // Allow everyone to access login page
+                        // Use the login page at the /login URL
+                        .loginPage("/login")
+                        // After successful login go to the dashboard page
+                        .defaultSuccessUrl("/dashboard")
+                        // If login fails go back to the login page with an error message
+                        .failureUrl("/login?error=true")
+                        // Allow everyone to see the login page
+                        .permitAll()
                 )
 
-                // Configure logout functionality
+                // Configure logout behavior
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout") // Redirect after logout
-                        .permitAll()                     // Allow everyone to logout
+                        // After logout go to the login page with a logout message
+                        .logoutSuccessUrl("/login?logout")
+                        // Allow everyone to access the logout URL
+                        .permitAll()
+                        // Invalidate the session so the user is fully logged out
+                        .invalidateHttpSession(true)
+                        // Delete the session cookie for extra security
+                        .deleteCookies("JSESSIONID")
                 )
 
-                // Allow H2 console to work in frames
+                // Allow the H2 database console to open in a frame in the browser
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())
                 );
 
+        // Return the built security filter chain to Spring
         return http.build();
     }
 }
