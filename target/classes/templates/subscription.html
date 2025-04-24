@@ -26,6 +26,9 @@
 <h1>Edit Subscription</h1>
 
 <form action="/update" method="post" th:object="${subscription}" class="mt-4">
+    <!-- CSRF Token (Required for Spring Security) -->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
     <input type="hidden" th:field="*{id}">
 
     <div class="mb-3">
