@@ -3,6 +3,8 @@ Subscription Shepard is a program designed for Metropolitan State University's S
 This program's purpose is to compile and organize a user's collection of subscription services. The user must create an account and login to access the dashboard. 
 From the dashboard the user can add their current subscriptions and see the total monthly spending.</br>
 
+To view the main code, see the /src/main/java/edu/metro/subscriptionshepard folder
+
 See the Subscription Shepard Manual for further information on running the web application. 
 
 CONTACT</br>
