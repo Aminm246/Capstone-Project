@@ -5,7 +5,7 @@ From the dashboard the user can add their current subscriptions and see the tota
 
 [To view the main code, click here](src/main/java/edu/metro/subscriptionshepard)
 
-[See Subscription Shepard Manual for set up info](docs/Subscription Shepard User Manual.pdf)
+See Subscription Shepard User Manual.pdf for more information on how to startup the program.
 
 CONTACT</br>
 This program was made by Amin Mohamed, Nicole Golden, Jaileia Yang, and Abdishakur Abdi.
